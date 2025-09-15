@@ -1,6 +1,6 @@
 {
   "name": "@meldai/sdk",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Official TypeScript SDK for Meld.ai",
   "license": "MIT",
   "scripts": {
@@ -22,13 +22,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/meld-ai/meldai-core.git",
+    "url": "git+https://github.com/meld-ai/meldai-sdk.git",
     "directory": "typescript"
   },
   "bugs": {
-    "url": "https://github.com/meld-ai/meldai-core/issues"
+    "url": "https://github.com/meld-ai/meldai-sdk/issues"
   },
-  "homepage": "https://github.com/meld-ai/meldai-core#readme",
+  "homepage": "https://github.com/meld-ai/meldai-sdk#readme",
   "publishConfig": {
     "access": "public"
   },
