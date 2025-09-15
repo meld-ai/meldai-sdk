@@ -130,7 +130,7 @@ func (c *Client) RunMeld[T any](ctx context.Context, options RunMeldOptions[T]) 
 		var apiErr APIError
 		if err := json.Unmarshal(body, &apiErr); err == nil {
 			apiErr.Status = resp.StatusCode
-			apiErr.RequestID = resp.Header.Get("X-Request-ID")
+			apiErr.RunID = resp.Header.Get("X-Run-Id")
 			return result, &apiErr
 		}
 		return result, fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))

@@ -7,18 +7,13 @@
     [
       "@semantic-release/npm",
       {
-        "pkgRoot": "typescript"
+        "npmPublish": false
       }
     ],
     [
       "@semantic-release/git",
       {
-        "assets": [
-          "CHANGELOG.md",
-          "typescript/package.json",
-          "python/pyproject.toml",
-          "go/go.mod"
-        ],
+        "assets": ["CHANGELOG.md", "package.json"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],

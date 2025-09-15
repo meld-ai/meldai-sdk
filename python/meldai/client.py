@@ -79,7 +79,7 @@ class MeldClient:
                 raise MeldAPIError(
                     message=error_data.get("message", f"API request failed with status {response.status_code}"),
                     status=response.status_code,
-                    request_id=response.headers.get("X-Request-ID"),
+                    request_id=response.headers.get("X-Run-Id"),
                     data=error_data,
                 )
             
@@ -90,7 +90,7 @@ class MeldClient:
                 raise MeldAPIError(
                     message=f"Failed to parse response JSON: {e}",
                     status=response.status_code,
-                    request_id=response.headers.get("X-Request-ID"),
+                    request_id=response.headers.get("X-Run-Id"),
                 )
                 
         except requests.exceptions.Timeout:

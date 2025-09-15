@@ -67,7 +67,7 @@ export class MeldClient {
             : `Meld API request failed with status ${res.status}`,
           {
             status: res.status,
-            requestId: res.headers.get("x-request-id"),
+            runId: res.headers.get("X-Run-Id"),
             data,
           }
         );

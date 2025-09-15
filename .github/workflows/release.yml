@@ -1,12 +1,12 @@
-name: Release
+name: Publish Release
 
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
 
 jobs:
-  release:
-    name: Release All SDK Packages
+  publish:
+    name: Publish SDK Packages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -61,9 +61,28 @@ jobs:
       - name: Run linting
         run: pnpm lint
 
-      - name: Semantic Release
-        run: pnpm semantic-release
+      - name: Run type checking
+        run: pnpm type-check
+
+      - name: Publish TypeScript Package
+        run: |
+          cd typescript
+          npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}  # Uncomment when ready to release Python
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Publish Python Package
+      #   run: |
+      #     cd python
+      #     python -m build
+      #     python -m twine upload dist/*
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+
+      # - name: Publish Go Package
+      #   run: |
+      #     cd go
+      #     # Add Go publishing logic here
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

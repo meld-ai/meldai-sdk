@@ -82,7 +82,7 @@ try {
 The error carries:
 - `status` (HTTP status code)
 - `message` (best‑effort message)
-- `requestId` (if the server returns `x-request-id`)
+- `runId` (if the server returns `x-run-id`)
 - `data` (parsed JSON body when available)
 
 ## Examples

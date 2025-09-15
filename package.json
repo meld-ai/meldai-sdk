@@ -1,7 +1,7 @@
 {
-  "name": "meldai-core",
+  "name": "meldai-sdk",
   "version": "1.0.0",
-  "description": "Meld.ai Multi-Language SDK Repository",
+  "description": "Meld.ai SDK Repository",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -11,18 +11,13 @@
     "clean": "turbo run clean",
     "dev": "turbo run dev",
     "type-check": "turbo run type-check",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "husky"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
     "turbo": "^2.0.0",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^11.1.0",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/npm": "^10.0.6",
-    "@semantic-release/release-notes-generator": "^12.1.0",
-    "semantic-release": "^22.0.12"
+    "husky": "^9.0.0"
   },
   "packageManager": "pnpm@10.13.1",
   "keywords": [

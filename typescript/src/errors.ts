@@ -1,16 +1,16 @@
 export class MeldAPIError extends Error {
   public status: number;
-  public requestId?: string | null;
+  public runId?: string | null;
   public data?: unknown;
 
   constructor(
     message: string,
-    options: { status: number; requestId?: string | null; data?: unknown }
+    options?: { status?: number; runId?: string | null; data?: unknown }
   ) {
     super(message);
     this.name = "MeldAPIError";
-    this.status = options.status;
-    this.requestId = options.requestId ?? null;
-    this.data = options.data;
+    this.status = options?.status ?? 0;
+    this.runId = options?.runId ?? null;
+    this.data = options?.data;
   }
 }

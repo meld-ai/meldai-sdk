@@ -42,6 +42,9 @@ importers:
 
   typescript:
     devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.14
@@ -64,7 +67,7 @@ importers:
         specifier: ^2.31.0
         version: 2.32.0(@typescript-eslint/parser@8.43.0(eslint@9.35.0)(typescript@5.9.2))(eslint@9.35.0)
       jest:
-        specifier: ^29.6.4
+        specifier: ^29.7.0
         version: 29.7.0(@types/node@22.18.3)(ts-node@10.9.2(@types/node@22.18.3)(typescript@5.9.2))
       prettier:
         specifier: ^3.4.2
