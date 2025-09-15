@@ -1,0 +1,12 @@
+{
+  "name": "@meldai/sdk-go",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Go build not implemented yet'",
+    "test": "echo 'Go tests not implemented yet'",
+    "lint": "echo 'Go linting not implemented yet'",
+    "format": "echo 'Go formatting not implemented yet'",
+    "clean": "echo 'Go clean not implemented yet'"
+  }
+}

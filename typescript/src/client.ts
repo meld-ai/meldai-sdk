@@ -8,7 +8,7 @@ export type MeldClientOptions = {
   fetch?: typeof globalThis.fetch;
 };
 
-const DEFAULT_BASE_URL = "https://local-jh.cloutly.com";
+const DEFAULT_BASE_URL = "https://app.meld.ai";
 
 export class MeldClient {
   private apiKey: string | null;

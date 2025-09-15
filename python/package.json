@@ -1,0 +1,12 @@
+{
+  "name": "@meldai/sdk-python",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Python build not implemented yet'",
+    "test": "echo 'Python tests not implemented yet'",
+    "lint": "echo 'Python linting not implemented yet'",
+    "format": "echo 'Python formatting not implemented yet'",
+    "clean": "echo 'Python clean not implemented yet'"
+  }
+}

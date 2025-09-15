@@ -92,12 +92,12 @@ See `example.ts` for a complete working example.
 ## Development
 
 ```bash
-npm install
-npm run build
-npm run lint
-npm run format
-npm test
-npm run example
+pnpm install
+pnpm run build
+pnpm run lint
+pnpm run format
+pnpm test
+pnpm run example
 ```
 
 ## License

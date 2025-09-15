@@ -7,7 +7,7 @@ from .types import RunMeldOptions
 
 T = TypeVar('T')
 
-DEFAULT_BASE_URL = "https://local-jh.cloutly.com"
+DEFAULT_BASE_URL = "https://app.meld.ai"
 DEFAULT_TIMEOUT = 60.0
 CLIENT_VERSION = "1.0.0"
 

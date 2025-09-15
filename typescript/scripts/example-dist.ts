@@ -1,6 +1,9 @@
-import { MeldClient } from "./src/index.js";
+import { MeldClient } from "../dist/index.js";
 
-const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
+const client = new MeldClient({
+  apiKey: 'abc',
+  // baseUrl: 'http://localhost:3000' // Override for local development
+});
 
 const main = async () => {
   type StructuredOutput = { body: string, title: string };

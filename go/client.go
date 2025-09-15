@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	DefaultBaseURL = "https://local-jh.cloutly.com"
+	DefaultBaseURL = "https://app.meld.ai"
 	DefaultTimeout = 60 * time.Second
 	ClientVersion  = "1.0.0"
 )

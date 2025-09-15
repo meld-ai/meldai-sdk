@@ -4,12 +4,27 @@
   "description": "Meld.ai Multi-Language SDK Repository",
   "private": true,
   "scripts": {
-    "format": "prettier --write \"**/*.{ts,tsx,md,py,go}\"",
-    "check-prettier": "prettier --check \"**/*.{ts,tsx,md,py,go}\""
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "clean": "turbo run clean",
+    "dev": "turbo run dev",
+    "type-check": "turbo run type-check",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "turbo": "^2.0.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^11.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/npm": "^10.0.6",
+    "@semantic-release/release-notes-generator": "^12.1.0",
+    "semantic-release": "^22.0.12"
   },
+  "packageManager": "pnpm@10.13.1",
   "keywords": [
     "meld",
     "ai",
