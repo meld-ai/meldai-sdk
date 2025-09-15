@@ -59,6 +59,7 @@ new MeldClient(options?: {
 export type RunMeldOptions<T> = {
   instructions: string;
   responseObject: T;
+  callbackUrl?: string;
   timeoutMs?: number;
 };
 ```
