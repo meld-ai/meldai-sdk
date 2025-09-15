@@ -10,14 +10,11 @@
     "format": "turbo run format",
     "clean": "turbo run clean",
     "dev": "turbo run dev",
-    "type-check": "turbo run type-check",
-    "semantic-release": "semantic-release",
-    "prepare": "husky"
+    "type-check": "turbo run type-check"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
-    "turbo": "^2.0.0",
-    "husky": "^9.0.0"
+    "turbo": "^2.0.0"
   },
   "packageManager": "pnpm@10.13.1",
   "keywords": [
