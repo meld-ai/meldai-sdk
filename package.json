@@ -1,0 +1,24 @@
+{
+  "name": "meldai-core",
+  "version": "1.0.0",
+  "description": "Meld.ai Multi-Language SDK Repository",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.{ts,tsx,md,py,go}\"",
+    "check-prettier": "prettier --check \"**/*.{ts,tsx,md,py,go}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  },
+  "keywords": [
+    "meld",
+    "ai",
+    "workflow",
+    "sdk",
+    "typescript",
+    "python",
+    "go",
+    "javascript",
+    "automation"
+  ]
+}
