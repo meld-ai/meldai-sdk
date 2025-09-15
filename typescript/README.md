@@ -32,6 +32,7 @@ const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 type StructuredOutput = { body: string, title: string };
 
 const result = await client.runMeld<StructuredOutput>({
+  meldId: "your-meld-id",
   instructions: "Convert the provided input into french",
   responseObject: { title: "Hello", body: "This is a test payload" },
 });
@@ -57,6 +58,7 @@ new MeldClient(options?: {
 
 ```ts
 export type RunMeldOptions<T> = {
+  meldId: string;
   instructions: string;
   responseObject: T;
   callbackUrl?: string;

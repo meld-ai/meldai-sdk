@@ -28,6 +28,7 @@ class StructuredOutput:
         self.title = title
 
 result = client.run_meld(RunMeldOptions(
+    meld_id="your-meld-id",
     instructions="Convert the provided input into french",
     response_object=StructuredOutput(title="Hello", body="This is a test payload"),
 ))
@@ -61,8 +62,10 @@ Executes a Meld workflow and returns the structured result.
 class RunMeldOptions:
     def __init__(
         self,
+        meld_id: str,                  # Meld ID to execute
         instructions: str,             # Instructions for the AI workflow
         response_object: T,            # Input data to process
+        callback_url: str = None,      # Optional callback URL for async execution
         timeout: float = None,         # Override default timeout (optional)
     )
 ```

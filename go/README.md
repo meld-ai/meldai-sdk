@@ -40,6 +40,7 @@ func main() {
     }
 
     result, err := client.RunMeld(context.Background(), meld.RunMeldOptions[MyStructuredOutput]{
+        MeldId: "your-meld-id",
         Instructions: "Summarize the input succinctly in french",
         ResponseObject: MyStructuredOutput{
             Title: "Hello", 
@@ -77,8 +78,10 @@ Executes a Meld workflow and returns the structured result.
 
 ```go
 type RunMeldOptions[T any] struct {
-    Instructions   string // Instructions for the AI workflow
-    ResponseObject T      // Input data to process
+    MeldId         string        // Meld ID to execute
+    Instructions   string        // Instructions for the AI workflow
+    ResponseObject T             // Input data to process
+    CallbackUrl    string        // Optional callback URL for async execution
     Timeout        time.Duration // Override default timeout (optional)
 }
 ```
