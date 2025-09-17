@@ -8,7 +8,7 @@ export class MeldAPIError extends Error {
     options?: { status?: number; runId?: string | null; data?: unknown }
   ) {
     super(message);
-    this.name = "MeldAPIError";
+    this.name = 'MeldAPIError';
     this.status = options?.status ?? 0;
     this.runId = options?.runId ?? null;
     this.data = options?.data;

@@ -1,5 +1,5 @@
-import { RunMeldOptions } from "./types";
-import { MeldAPIError } from "./errors";
+import { RunMeldOptions } from './types';
+import { MeldAPIError } from './errors';
 
 /**
  * Configuration options for the Meld client
@@ -33,7 +33,7 @@ export type MeldClientOptions = {
 };
 
 /** Default base URL for the Meld API */
-const DEFAULT_BASE_URL = "https://app.meld.ai";
+const DEFAULT_BASE_URL = 'https://app.meld.ai';
 
 /**
  * Main client for interacting with the Meld.ai API
@@ -68,7 +68,7 @@ export class MeldClient {
   async runMeld<T>(options: RunMeldOptions<T>): Promise<T> {
     const apiKey = this.apiKey ?? process.env.MELD_API_KEY ?? null;
     if (!apiKey) {
-      throw new Error("Missing API key. Pass apiKey or set MELD_API_KEY.");
+      throw new Error('Missing API key. Pass apiKey or set MELD_API_KEY.');
     }
 
     const timeout = options.timeoutMs ?? this.defaultTimeout;
@@ -82,11 +82,11 @@ export class MeldClient {
 
     try {
       const res = await this._fetch(endpoint, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${apiKey}`,
-          "X-Meld-Client": `@meldai/sdk/1.0.0`,
+          'X-Meld-Client': '@meldai/sdk/1.0.0',
         },
         body: JSON.stringify({
           meldId: options.meldId,
@@ -98,18 +98,18 @@ export class MeldClient {
       });
 
       const text = await res.text();
-      const contentType = res.headers.get("content-type") ?? "";
-      const maybeJson = contentType.includes("application/json");
+      const contentType = res.headers.get('content-type') ?? '';
+      const maybeJson = contentType.includes('application/json');
       const data = maybeJson && text ? JSON.parse(text) : text;
 
       if (!res.ok) {
         throw new MeldAPIError(
-          typeof (data as any)?.message === "string"
+          typeof (data as any)?.message === 'string'
             ? (data as any).message
             : `Meld API request failed with status ${res.status}`,
           {
             status: res.status,
-            runId: res.headers.get("X-Run-Id"),
+            runId: res.headers.get('X-Run-Id'),
             data,
           }
         );
@@ -117,8 +117,8 @@ export class MeldClient {
 
       return data as T;
     } catch (err: any) {
-      if (err?.name === "AbortError") {
-        throw new MeldAPIError("Request timed out", { status: 408 });
+      if (err?.name === 'AbortError') {
+        throw new MeldAPIError('Request timed out', { status: 408 });
       }
       throw err;
     } finally {

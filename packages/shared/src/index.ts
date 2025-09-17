@@ -7,6 +7,8 @@
 
 export * from './types';
 
+import type { Mode } from './types';
+
 /**
  * Utility function to get current timestamp in ISO format
  * @returns Current timestamp as ISO string
