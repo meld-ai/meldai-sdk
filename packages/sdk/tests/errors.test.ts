@@ -14,13 +14,13 @@ describe('MeldAPIError', () => {
     const errorData = { code: 'INVALID_REQUEST' };
     const error = new MeldAPIError('Test error', {
       status: 400,
-      runId: 'req-123',
+      runId: 'run-123',
       data: errorData,
     });
 
     expect(error.message).toBe('Test error');
     expect(error.status).toBe(400);
-    expect(error.runId).toBe('req-123');
+    expect(error.runId).toBe('run-123');
     expect(error.data).toEqual(errorData);
   });
 

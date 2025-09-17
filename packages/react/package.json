@@ -1,0 +1,26 @@
+{
+  "name": "@meldai/react",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "echo 'React build not implemented yet'",
+    "dev": "echo 'React dev not implemented yet'",
+    "test": "echo 'React tests not implemented yet'",
+    "lint": "echo 'React linting not implemented yet'",
+    "clean": "echo 'React clean not implemented yet'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

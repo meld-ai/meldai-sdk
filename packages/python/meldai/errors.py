@@ -5,16 +5,16 @@ class MeldAPIError(Exception):
         self,
         message: str,
         status: int = 0,
-        request_id: str = None,
+        run_id: str = None,
         data: dict = None,
     ):
         super().__init__(message)
         self.message = message
         self.status = status
-        self.request_id = request_id
+        self.run_id = run_id
         self.data = data or {}
     
     def __str__(self) -> str:
-        if self.request_id:
-            return f"Meld API error (status {self.status}, request {self.request_id}): {self.message}"
+        if self.run_id:
+            return f"Meld API error (status {self.status}, run {self.run_id}): {self.message}"
         return f"Meld API error (status {self.status}): {self.message}"

@@ -1,15 +1,57 @@
 import { RunMeldOptions } from "./types";
 import { MeldAPIError } from "./errors";
 
+/**
+ * Configuration options for the Meld client
+ */
 export type MeldClientOptions = {
+  /** 
+   * Your Meld API key. If not provided, will use MELD_API_KEY environment variable
+   * @example "meld_sk_1234567890abcdef"
+   */
   apiKey?: string | null;
+
+  /** 
+   * Base URL for the Meld API. Useful for local development or custom deployments
+   * @default "https://app.meld.ai"
+   * @example "http://localhost:3000"
+   */
   baseUrl?: string;
+
+  /** 
+   * Default timeout in milliseconds for all requests
+   * @default 60000 (60 seconds)
+   * @example 30000
+   */
   timeoutMs?: number;
+
+  /** 
+   * Custom fetch implementation. Useful for testing or custom HTTP behavior
+   * @default globalThis.fetch
+   */
   fetch?: typeof globalThis.fetch;
 };
 
+/** Default base URL for the Meld API */
 const DEFAULT_BASE_URL = "https://app.meld.ai";
 
+/**
+ * Main client for interacting with the Meld.ai API
+ * 
+ * @example
+ * ```typescript
+ * const client = new MeldClient({
+ *   apiKey: process.env.MELD_API_KEY,
+ *   baseUrl: 'https://app.meld.ai'
+ * });
+ * 
+ * const result = await client.runMeld({
+ *   meldId: 'meld_123',
+ *   instructions: 'Convert to French',
+ *   responseObject: { text: 'Hello world' }
+ * });
+ * ```
+ */
 export class MeldClient {
   private apiKey: string | null;
   private baseUrl: string;

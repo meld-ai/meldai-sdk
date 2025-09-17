@@ -23,7 +23,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/meld-ai/meldai-sdk.git",
-    "directory": "typescript"
+    "directory": "packages/sdk"
   },
   "bugs": {
     "url": "https://github.com/meld-ai/meldai-sdk/issues"
@@ -46,6 +46,9 @@
   ],
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@meldai/shared": "workspace:*"
   },
   "keywords": [
     "meld",
@@ -76,7 +79,6 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
     "@semantic-release/npm": "^10.0.6",
     "@semantic-release/release-notes-generator": "^12.1.0",
     "semantic-release": "^22.0.12"

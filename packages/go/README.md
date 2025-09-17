@@ -95,8 +95,8 @@ result, err := client.RunMeld(ctx, options)
 if err != nil {
     var apiErr *meld.APIError
     if errors.As(err, &apiErr) {
-        fmt.Printf("API Error: %s (status: %d, request: %s)\n", 
-            apiErr.Message, apiErr.Status, apiErr.RequestID)
+        fmt.Printf("API Error: %s (status: %d, run: %s)\n", 
+            apiErr.Message, apiErr.Status, apiErr.RunID)
     } else {
         fmt.Printf("Other error: %v\n", err)
     }

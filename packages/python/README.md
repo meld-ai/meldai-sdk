@@ -78,7 +78,7 @@ API errors are raised as `MeldAPIError`:
 try:
     result = client.run_meld(options)
 except MeldAPIError as e:
-    print(f"API Error: {e.message} (status: {e.status}, request: {e.request_id})")
+    print(f"API Error: {e.message} (status: {e.status}, run: {e.run_id})")
 except Exception as e:
     print(f"Other error: {e}")
 ```

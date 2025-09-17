@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      husky:
-        specifier: ^9.0.0
-        version: 9.1.7
       prettier:
         specifier: ^3.2.5
         version: 3.6.2
@@ -18,11 +15,21 @@ importers:
         specifier: ^2.0.0
         version: 2.5.6
 
-  go: {}
+  packages/go: {}
 
-  python: {}
+  packages/python: {}
 
-  typescript:
+  packages/react:
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.2
+
+  packages/sdk:
+    dependencies:
+      '@meldai/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -36,9 +43,6 @@ importers:
       '@semantic-release/git':
         specifier: ^10.0.1
         version: 10.0.1(semantic-release@22.0.12(typescript@5.9.2))
-      '@semantic-release/github':
-        specifier: ^9.2.6
-        version: 9.2.6(semantic-release@22.0.12(typescript@5.9.2))
       '@semantic-release/npm':
         specifier: ^10.0.6
         version: 10.0.6(semantic-release@22.0.12(typescript@5.9.2))
@@ -90,6 +94,15 @@ importers:
       typedoc:
         specifier: ^0.26.0
         version: 0.26.11(typescript@5.9.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.2
+
+  packages/shared:
+    devDependencies:
+      tsup:
+        specifier: ^8.0.2
+        version: 8.5.0(tsx@4.20.5)(typescript@5.9.2)(yaml@2.8.1)
       typescript:
         specifier: ^5.7.2
         version: 5.9.2
@@ -1905,11 +1918,6 @@ packages:
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
-
-  husky@9.1.7:
-    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
-    engines: {node: '>=18'}
-    hasBin: true
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -5809,8 +5817,6 @@ snapshots:
   human-signals@2.1.0: {}
 
   human-signals@5.0.0: {}
-
-  husky@9.1.7: {}
 
   ignore@5.3.2: {}
 
