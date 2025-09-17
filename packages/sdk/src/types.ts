@@ -95,8 +95,8 @@ export type RunMeldOptions<T> = {
 
   /** 
    * Optional timeout in milliseconds (overrides client default)
-   * @default 60000 (60 seconds)
-   * @example 30000
+   * @default 60_000 (60 seconds)
+   * @example 30_000
    */
   timeoutMs?: number;
 };
