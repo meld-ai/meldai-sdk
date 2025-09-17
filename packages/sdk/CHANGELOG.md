@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/meld-ai/meldai-sdk/compare/v1.0.0...v1.1.0) (2025-09-17)
+
+
+### Bug Fixes
+
+* rename endpoint ([74fbb44](https://github.com/meld-ai/meldai-sdk/commit/74fbb44d58c2adc31e761fd92015781a32798eaf))
+* **sdk:** remove version ([5d36575](https://github.com/meld-ai/meldai-sdk/commit/5d3657564298094f2c6e858a2e3a8fd974dcd9f7))
+
+
+### Features
+
+* initial release ([d466b2a](https://github.com/meld-ai/meldai-sdk/commit/d466b2a5c2398795cf4e758a1aba1670f50341c7))
+* **release:** update release workflow to trigger on CI completion and add checks for SDK, Go, and Python changes ([87c3a2c](https://github.com/meld-ai/meldai-sdk/commit/87c3a2c8d2d7a0664f289af2936cca5c5f70e1e7))
+* **turbo:** add test coverage script and configuration to enhance testing capabilities ([66180bd](https://github.com/meld-ai/meldai-sdk/commit/66180bdafeffe8adee0e17238d820658207fe536))
+
 # 1.0.0 (2025-09-15)
 
 
