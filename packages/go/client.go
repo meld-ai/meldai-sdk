@@ -81,7 +81,7 @@ func (c *Client) RunMeld[T any](ctx context.Context, options RunMeldOptions[T]) 
 	}
 
 	// Determine endpoint based on callbackUrl presence
-	endpoint := c.baseURL + "/api/v1/run-meld"
+	endpoint := c.baseURL + "/api/v1/meld-run"
 	if options.CallbackUrl == "" {
 		endpoint += "/sync"
 	}
