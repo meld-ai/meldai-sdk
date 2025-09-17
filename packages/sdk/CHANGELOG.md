@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/meld-ai/meldai-sdk/compare/v1.1.0...v1.1.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* **client.go:** update API endpoint from /api/v1/run-meld to /api/v1/meld-run for consistency with naming conventions ([8886f0d](https://github.com/meld-ai/meldai-sdk/commit/8886f0d78eff11d650cbec65cdd750e8fa7e61a4))
+* **sdk:** merge shared ([f936226](https://github.com/meld-ai/meldai-sdk/commit/f93622624fbb25227b099d0a0c44091ad8dcfa20))
+
 # [1.1.0](https://github.com/meld-ai/meldai-sdk/compare/v1.0.0...v1.1.0) (2025-09-17)
 
 
