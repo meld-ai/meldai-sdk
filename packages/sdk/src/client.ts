@@ -77,8 +77,8 @@ export class MeldClient {
 
     // Determine endpoint based on callbackUrl presence
     const endpoint = options.callbackUrl
-      ? `${this.baseUrl}/api/v1/run-meld`
-      : `${this.baseUrl}/api/v1/run-meld/sync`;
+      ? `${this.baseUrl}/api/v1/meld-run`
+      : `${this.baseUrl}/api/v1/meld-run/sync`;
 
     try {
       const res = await this._fetch(endpoint, {

@@ -69,7 +69,7 @@ describe('MeldClient', () => {
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://app.meld.ai/api/v1/run-meld/sync',
+        'https://app.meld.ai/api/v1/meld-run/sync',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
@@ -100,7 +100,7 @@ describe('MeldClient', () => {
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://app.meld.ai/api/v1/run-meld',
+        'https://app.meld.ai/api/v1/meld-run',
         expect.any(Object)
       );
     });
@@ -118,7 +118,7 @@ describe('MeldClient', () => {
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://custom.example.com/api/v1/run-meld/sync',
+        'https://custom.example.com/api/v1/meld-run/sync',
         expect.any(Object)
       );
     });

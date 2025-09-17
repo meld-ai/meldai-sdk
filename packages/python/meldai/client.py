@@ -40,7 +40,7 @@ class MeldClient:
             raise ValueError("Missing API key. Pass apiKey or set MELD_API_KEY environment variable")
         
         # Determine endpoint based on callbackUrl presence
-        endpoint = f"{self.options.base_url}/api/v1/run-meld"
+        endpoint = f"{self.options.base_url}/api/v1/meld-run"
         if not options.callback_url:
             endpoint += "/sync"
         
