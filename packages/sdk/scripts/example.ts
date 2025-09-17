@@ -1,8 +1,8 @@
 import { MeldClient } from '../src/index.js';
 
 const client = new MeldClient({
-  apiKey: 'abc',
-  baseUrl: 'http://localhost:3000' // Override for local development
+  apiKey: 'sk-test123',
+  // baseUrl: 'http://localhost:3000' // Override for local development
 });
 
 const main = async () => {

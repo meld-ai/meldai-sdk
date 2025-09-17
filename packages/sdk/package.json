@@ -47,9 +47,7 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
-    "@meldai/shared": "workspace:*"
-  },
+  "dependencies": {},
   "keywords": [
     "meld",
     "ai",
