@@ -86,7 +86,7 @@ export class MeldClient {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${apiKey}`,
-          'X-Meld-Client': '@meldai/sdk/1.0.0',
+          'X-Meld-Client': '@meldai/sdk',
         },
         body: JSON.stringify({
           meldId: options.meldId,

@@ -75,7 +75,7 @@ describe('MeldClient', () => {
           headers: expect.objectContaining({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer test-key',
-            'X-Meld-Client': '@meldai/sdk/1.0.0',
+            'X-Meld-Client': '@meldai/sdk',
           }),
           body: JSON.stringify({
             meldId: 'test-meld',
