@@ -105,56 +105,39 @@ jobs:
       - name: Check for SDK changes
         id: sdk-changes
         run: |
+          echo "Checking for SDK changes..."
+          echo "Current commit: $(git rev-parse HEAD)"
+          echo "Previous commit: $(git rev-parse HEAD~1)"
+          echo "Files changed in this commit:"
+          git diff --name-only HEAD~1 HEAD
+          echo "Checking if any SDK files changed..."
           if git diff --name-only HEAD~1 HEAD | grep -q "^packages/sdk/"; then
+            echo "SDK files changed!"
             echo "changed=true" >> $GITHUB_OUTPUT
           else
+            echo "No SDK files changed"
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Check for Go changes
-        id: go-changes
-        run: |
-          if git diff --name-only HEAD~1 HEAD | grep -q "^packages/go/"; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Check for Python changes
-        id: python-changes
-        run: |
-          if git diff --name-only HEAD~1 HEAD | grep -q "^packages/python/"; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+          echo "SDK changes result: ${{ steps.sdk-changes.outputs.changed }}"
 
       - name: Run semantic-release for SDK
         if: steps.sdk-changes.outputs.changed == 'true'
         run: |
+          echo "Running semantic-release for SDK..."
           cd packages/sdk
+          echo "Current directory: $(pwd)"
+          echo "Package.json version: $(cat package.json | grep version)"
           CI=true pnpm semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run semantic-release for Go
-        if: steps.go-changes.outputs.changed == 'true'
-        run: |
-          cd packages/go
-          echo "done"
-        # pnpm semantic-release
-
-      - name: Run semantic-release for Python
-        if: steps.python-changes.outputs.changed == 'true'
-        run: |
-          cd packages/python
-          echo "done"
-        # pnpm semantic-release
-
       - name: Publish SDK to npm
         if: steps.sdk-changes.outputs.changed == 'true'
         run: |
+          echo "Publishing SDK to npm..."
           cd packages/sdk
+          echo "Current directory: $(pwd)"
+          echo "Package.json version: $(cat package.json | grep version)"
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
