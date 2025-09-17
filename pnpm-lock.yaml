@@ -26,10 +26,6 @@ importers:
         version: 5.9.2
 
   packages/sdk:
-    dependencies:
-      '@meldai/shared':
-        specifier: workspace:*
-        version: link:../shared
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
