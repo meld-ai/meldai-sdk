@@ -12,16 +12,15 @@ import (
 )
 
 const (
-	DefaultBaseURL = "https://app.meld.ai"
+	DefaultBaseURL = "https://sdk-api.meld.ai"
 	DefaultTimeout = 60 * time.Second
-	ClientVersion  = "1.0.0"
 )
 
 // ClientOptions configures the Meld client
 type ClientOptions struct {
-	APIKey   string
-	BaseURL  string
-	Timeout  time.Duration
+	APIKey     string
+	BaseURL    string
+	Timeout    time.Duration
 	HTTPClient *http.Client
 }
 
@@ -110,7 +109,7 @@ func (c *Client) RunMeld[T any](ctx context.Context, options RunMeldOptions[T]) 
 	// Set headers
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+c.apiKey)
-	req.Header.Set("X-Meld-Client", fmt.Sprintf("meldai-go-sdk/%s", ClientVersion))
+	req.Header.Set("X-Meld-Client", "meldai-go-sdk")
 
 	// Execute request
 	resp, err := c.httpClient.Do(req)

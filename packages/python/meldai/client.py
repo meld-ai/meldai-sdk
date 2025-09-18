@@ -7,9 +7,8 @@ from .types import RunMeldOptions
 
 T = TypeVar('T')
 
-DEFAULT_BASE_URL = "https://app.meld.ai"
+DEFAULT_BASE_URL = "https://sdk-api.meld.ai"
 DEFAULT_TIMEOUT = 60.0
-CLIENT_VERSION = "1.0.0"
 
 
 class MeldClientOptions:
@@ -57,7 +56,7 @@ class MeldClient:
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.options.api_key}",
-            "X-Meld-Client": f"meldai-python-sdk/{CLIENT_VERSION}",
+            "X-Meld-Client": f"meldai-python-sdk",
         }
         
         try:

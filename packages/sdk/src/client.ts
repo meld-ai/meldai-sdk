@@ -13,7 +13,7 @@ export type MeldClientOptions = {
 
   /** 
    * Base URL for the Meld API. Useful for local development or custom deployments
-   * @default "https://app.meld.ai"
+   * @default "https://sdk-api.meld.ai"
    * @example "http://localhost:3000"
    */
   baseUrl?: string;
@@ -33,7 +33,7 @@ export type MeldClientOptions = {
 };
 
 /** Default base URL for the Meld API */
-const DEFAULT_BASE_URL = 'https://app.meld.ai';
+export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai';
 
 /**
  * Main client for interacting with the Meld.ai API
@@ -42,7 +42,6 @@ const DEFAULT_BASE_URL = 'https://app.meld.ai';
  * ```typescript
  * const client = new MeldClient({
  *   apiKey: process.env.MELD_API_KEY,
- *   baseUrl: 'https://app.meld.ai'
  * });
  * 
  * const result = await client.runMeld({
