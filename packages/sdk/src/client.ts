@@ -33,7 +33,7 @@ export type MeldClientOptions = {
 };
 
 /** Default base URL for the Meld API */
-export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai';
+export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai/';
 
 /**
  * Main client for interacting with the Meld.ai API
@@ -74,10 +74,19 @@ export class MeldClient {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
 
+    const formatEndpointWithApi = () => {
+      if (this.baseUrl.includes('localhost')) {
+        return `${this.baseUrl}/v1/meld-run`;
+      }
+      return `${this.baseUrl}/api/v1/meld-run`;
+    }
+
+    const url = formatEndpointWithApi()
+
     // Determine endpoint based on callbackUrl presence
     const endpoint = options.callbackUrl
-      ? `${this.baseUrl}/api/v1/meld-run`
-      : `${this.baseUrl}/api/v1/meld-run/sync`;
+      ? `${url}`
+      : `${url}/sync`;
 
     try {
       const res = await this._fetch(endpoint, {

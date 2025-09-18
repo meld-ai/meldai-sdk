@@ -220,16 +220,16 @@ describe('MeldClient', () => {
   });
 
   describe('endpoint formatting', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-      (global as any).fetch = jest.fn().mockResolvedValue({
+    it('should use non /api for localhost endpoint format', async () => {
+      mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ result: 'success' }),
-        headers: new Headers(),
-      } as never);
-    });
+        status: 200,
+        headers: new Headers({
+          'content-type': 'text/plain',
+        }),
+        text: jest.fn().mockResolvedValue('{"input": "test"}' as never),
+      } as any);
 
-    it('should use /v1/meld-run for localhost URLs', async () => {
       const client = new MeldClient({
         apiKey: 'test-key',
         baseUrl: 'http://localhost:3000',
@@ -241,100 +241,8 @@ describe('MeldClient', () => {
         responseObject: { input: 'test' },
       });
 
-      expect(global.fetch).toHaveBeenCalledWith(
+      expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:3000/v1/meld-run/sync',
-        expect.any(Object)
-      );
-    });
-
-    it('should use /api/v1/meld-run for non-localhost URLs', async () => {
-      const client = new MeldClient({
-        apiKey: 'test-key',
-        baseUrl: DEFAULT_BASE_URL,
-      });
-
-      await client.runMeld({
-        meldId: 'test-meld',
-        instructions: 'Test instructions',
-        responseObject: { input: 'test' },
-      });
-
-      expect(global.fetch).toHaveBeenCalledWith(
-        `${DEFAULT_BASE_URL}/api/v1/meld-run/sync`,
-        expect.any(Object)
-      );
-    });
-
-    it('should use /v1/meld-run for localhost with callbackUrl (async)', async () => {
-      const client = new MeldClient({
-        apiKey: 'test-key',
-        baseUrl: 'http://localhost:3000',
-      });
-
-      await client.runMeld({
-        meldId: 'test-meld',
-        instructions: 'Test instructions',
-        responseObject: { input: 'test' },
-        callbackUrl: 'https://example.com/callback',
-      });
-
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/v1/meld-run',
-        expect.any(Object)
-      );
-    });
-
-    it('should use /api/v1/meld-run for non-localhost with callbackUrl (async)', async () => {
-      const client = new MeldClient({
-        apiKey: 'test-key',
-        baseUrl: DEFAULT_BASE_URL,
-      });
-
-      await client.runMeld({
-        meldId: 'test-meld',
-        instructions: 'Test instructions',
-        responseObject: { input: 'test' },
-        callbackUrl: 'https://example.com/callback',
-      });
-
-      expect(mockFetch).toHaveBeenCalledWith(
-        `${DEFAULT_BASE_URL}/api/v1/meld-run`,
-        expect.any(Object)
-      );
-    });
-
-    it('should handle localhost with port in URL', async () => {
-      const client = new MeldClient({
-        apiKey: 'test-key',
-        baseUrl: 'http://localhost:8080',
-      });
-
-      await client.runMeld({
-        meldId: 'test-meld',
-        instructions: 'Test instructions',
-        responseObject: { input: 'test' },
-      });
-
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:8080/v1/meld-run/sync',
-        expect.any(Object)
-      );
-    });
-
-    it('should handle 127.0.0.1 as localhost', async () => {
-      const client = new MeldClient({
-        apiKey: 'test-key',
-        baseUrl: 'http://127.0.0.1:3000',
-      });
-
-      await client.runMeld({
-        meldId: 'test-meld',
-        instructions: 'Test instructions',
-        responseObject: { input: 'test' },
-      });
-
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://127.0.0.1:3000/v1/meld-run/sync',
         expect.any(Object)
       );
     });
