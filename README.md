@@ -22,6 +22,42 @@ yarn add @meldai/sdk
 
 - Run an AI workflow and get a returned structured result synchronously
 - CallbackUrl to get the result asynchronously
+- Use Zod schemas for automatic validation and type inference
+
+### Using Zod Schemas (Recommended)
+
+```ts
+import { MeldClient } from "@meldai/sdk";
+import { z } from "zod";
+
+const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
+
+const main = async () => {
+  // Define your expected response structure with Zod
+  const responseSchema = z.object({
+    title: z.string(),
+    body: z.string(),
+  });
+
+  type TranslationResult = z.infer<typeof responseSchema>;
+
+  const result = await client.runMeld<TranslationResult>({
+    meldId: "translate-to-french",
+    instructions: "Convert the provided input into french",
+    input: { message: "Hello world", userId: 123 },
+    responseObject: responseSchema,
+    metadata: { requestId: "abc-123" },
+  });
+
+  console.log('result', result);
+  // { title: "Bonjour", body: "Ceci est une charge utile de test" }
+  // Fully typed and validated!
+};
+
+main().catch(console.error);
+```
+
+### Using Plain Objects
 
 ```ts
 import { MeldClient } from "@meldai/sdk";
@@ -29,13 +65,14 @@ import { MeldClient } from "@meldai/sdk";
 const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 
 const main = async () => {
-
   type StructuredOutput = { body: string, title: string };
 
   const result = await client.runMeld<StructuredOutput>({
     meldId: "translate-to-french",
     instructions: "Convert the provided input into french",
-    responseObject: { title: "Hello", body: "This is a test payload" },
+    input: { message: "Hello world", userId: 123 },
+    responseObject: { title: "string", body: "string" }, // Plain object descriptor
+    metadata: { requestId: "abc-123" },
   });
 
   console.log(result);
@@ -76,9 +113,16 @@ func main() {
     result, err := client.RunMeld(context.Background(), meld.RunMeldOptions[StructuredOutput]{
         MeldId:       "translate-to-french",
         Instructions: "Convert the provided input into french",
+        Input: map[string]interface{}{
+            "message": "Hello world",
+            "userId":  123,
+        },
         ResponseObject: StructuredOutput{
             Title: "Hello",
             Body:  "This is a test payload",
+        },
+        Metadata: map[string]interface{}{
+            "requestId": "abc-123",
         },
     })
 
@@ -112,7 +156,9 @@ def main():
     result = client.run_meld(RunMeldOptions(
         meld_id="translate-to-french",
         instructions="Convert the provided input into french",
+        input={"message": "Hello world", "userId": 123},
         response_object=StructuredOutput(title="Hello", body="This is a test payload"),
+        metadata={"requestId": "abc-123"},
     ))
     
     print('result', result)
@@ -124,9 +170,9 @@ if __name__ == "__main__":
 
 ## Available SDKs
 
-- **TypeScript/JavaScript**: `@meldai/sdk` - [Documentation](typescript/README.md)
-- **Python**: `meldai-sdk` - [Documentation](python/README.md)  
-- **Go**: `github.com/meld-ai/meldai-core/go-sdk` - [Documentation](go/README.md)
+- **TypeScript/JavaScript**: `@meldai/sdk` - [Documentation](packages/sdk/README.md)
+- **Python**: `meldai-sdk` - [Documentation](packages/python/README.md)  
+- **Go**: `github.com/meld-ai/meldai-core/go-sdk` - [Documentation](packages/go/README.md)
 
 ## Development
 
