@@ -81,7 +81,7 @@ export type RunMeldOptions = {
   input: Record<string, unknown>;
 
   /** 
-   * Either a Zod schema for validation/inference, or any JSON object to describe the expected shape without validation
+   * Either a Zod schema for validation/inference, or any JSON object to describe the expected shape
    * @example z.object({ key: z.array(z.string()) })
    * @example { key: ['value1', 'value2'] }
    */
