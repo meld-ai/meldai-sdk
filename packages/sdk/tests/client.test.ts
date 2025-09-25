@@ -92,13 +92,15 @@ describe('MeldClient', () => {
         instructions: 'Test instructions',
         input: { input: 'test' },
         responseObject: expect.objectContaining({
-          type: 'object',
-          properties: expect.objectContaining({
-            title: { type: 'string' },
-            body: { type: 'string' }
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          definitions: expect.objectContaining({
+            responseObject: expect.objectContaining({
+              properties: expect.objectContaining({
+                title: { type: 'string' },
+                body: { type: 'string' }
+              }),
+            }),
           }),
-          required: ['title', 'body'],
-          additionalProperties: false
         }),
         callbackUrl: undefined,
         metadata: { requestId: 'abc' },
