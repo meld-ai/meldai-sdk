@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import { MeldClient, DEFAULT_BASE_URL } from '../src/client';
 import { MeldAPIError } from '../src/errors';
+import { z } from 'zod';
 
 // Mock fetch
 const mockFetch = (global as any).fetch as jest.MockedFunction<typeof fetch>;
@@ -47,6 +48,7 @@ describe('MeldClient', () => {
 
   describe('runMeld', () => {
     const mockResponse = { title: 'Test', body: 'Test body' };
+    const schema = z.object({ title: z.string(), body: z.string() });
 
     beforeEach(() => {
       mockFetch.mockResolvedValue({
@@ -59,14 +61,19 @@ describe('MeldClient', () => {
       } as any);
     });
 
-    it('should make successful API call', async () => {
+    it('should make successful API call with Zod schema', async () => {
       const client = new MeldClient({ apiKey: 'test-key' });
 
-      const result = await client.runMeld({
+      const result = await client.runMeld<typeof schema>({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: { requestId: 'abc' },
+        responseObject: schema,
       });
+
+      const callArgs = mockFetch.mock.calls[0];
+      const requestBody = JSON.parse(callArgs[1]?.body as string);
 
       expect(mockFetch).toHaveBeenCalledWith(
         `${DEFAULT_BASE_URL}/api/v1/meld-run/sync`,
@@ -77,14 +84,52 @@ describe('MeldClient', () => {
             'Authorization': 'Bearer test-key',
             'X-Meld-Client': '@meldai/sdk',
           }),
-          body: JSON.stringify({
-            meldId: 'test-meld',
-            instructions: 'Test instructions',
-            inputObject: { input: 'test' },
-            callbackUrl: undefined,
-          }),
         })
       );
+
+      expect(requestBody).toEqual({
+        meldId: 'test-meld',
+        instructions: 'Test instructions',
+        input: { input: 'test' },
+        responseObject: expect.objectContaining({
+          type: 'object',
+          properties: expect.objectContaining({
+            title: { type: 'string' },
+            body: { type: 'string' }
+          }),
+          required: ['title', 'body'],
+          additionalProperties: false
+        }),
+        callbackUrl: undefined,
+        metadata: { requestId: 'abc' },
+      });
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should make successful API call with plain object', async () => {
+      const client = new MeldClient({ apiKey: 'test-key' });
+      const plainObject = { title: 'string', body: 'string' };
+
+      const result = await client.runMeld<Record<string, unknown>>({
+        meldId: 'test-meld',
+        instructions: 'Test instructions',
+        input: { input: 'test' },
+        metadata: { requestId: 'abc' },
+        responseObject: plainObject,
+      });
+
+      const callArgs = mockFetch.mock.calls[0];
+      const requestBody = JSON.parse(callArgs[1]?.body as string);
+
+      expect(requestBody).toEqual({
+        meldId: 'test-meld',
+        instructions: 'Test instructions',
+        input: { input: 'test' },
+        responseObject: plainObject,
+        callbackUrl: undefined,
+        metadata: { requestId: 'abc' },
+      });
 
       expect(result).toEqual(mockResponse);
     });
@@ -95,7 +140,9 @@ describe('MeldClient', () => {
       await client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: schema,
         callbackUrl: 'https://callback.example.com',
       });
 
@@ -114,7 +161,9 @@ describe('MeldClient', () => {
       await client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: schema,
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
@@ -129,7 +178,9 @@ describe('MeldClient', () => {
       await expect(client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: schema,
       })).rejects.toThrow('Missing API key. Pass apiKey or set MELD_API_KEY.');
     });
 
@@ -150,7 +201,9 @@ describe('MeldClient', () => {
       await expect(client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: schema,
       })).rejects.toThrow(MeldAPIError);
     });
 
@@ -159,7 +212,7 @@ describe('MeldClient', () => {
         new Promise((_, reject) => {
           setTimeout(() => {
             const error = new Error('Request timed out');
-            error.name = 'AbortError';
+            (error as any).name = 'AbortError';
             reject(error);
           }, 100);
         })
@@ -173,7 +226,9 @@ describe('MeldClient', () => {
       await expect(client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: schema,
       })).rejects.toThrow(MeldAPIError);
     });
 
@@ -192,7 +247,9 @@ describe('MeldClient', () => {
       const result = await client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: z.any(),
       });
 
       expect(result).toBe('plain text response');
@@ -205,7 +262,9 @@ describe('MeldClient', () => {
       await client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: schema,
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
@@ -238,7 +297,9 @@ describe('MeldClient', () => {
       await client.runMeld({
         meldId: 'test-meld',
         instructions: 'Test instructions',
-        responseObject: { input: 'test' },
+        input: { input: 'test' },
+        metadata: {},
+        responseObject: z.any(),
       });
 
       expect(mockFetch).toHaveBeenCalledWith(

@@ -1,5 +1,7 @@
 import { RunMeldOptions } from './types';
 import { MeldAPIError } from './errors';
+import { zodToJsonSchema } from 'zod-to-json-schema';
+import { ZodType } from 'zod';
 
 /**
  * Configuration options for the Meld client
@@ -44,10 +46,13 @@ export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai/';
  *   apiKey: process.env.MELD_API_KEY,
  * });
  * 
- * const result = await client.runMeld({
+ * const schema = z.object({ key: z.array(z.string()) });
+ * const result = await client.runMeld<MyResultType>({
  *   meldId: 'meld_123',
- *   instructions: 'Convert to French',
- *   responseObject: { text: 'Hello world' }
+ *   instructions: 'Extract keywords',
+ *   input: { text: 'Hello world' },
+ *   responseObject: schema,
+ *   metadata: { userId: 123 },
  * });
  * ```
  */
@@ -64,7 +69,7 @@ export class MeldClient {
     this._fetch = opts.fetch ?? globalThis.fetch.bind(globalThis);
   }
 
-  async runMeld<T>(options: RunMeldOptions<T>): Promise<T> {
+  async runMeld<T>(options: RunMeldOptions): Promise<T> {
     const apiKey = this.apiKey ?? process.env.MELD_API_KEY ?? null;
     if (!apiKey) {
       throw new Error('Missing API key. Pass apiKey or set MELD_API_KEY.');
@@ -89,6 +94,14 @@ export class MeldClient {
       : `${url}/sync`;
 
     try {
+      let responseObjectForAPI: any;
+      if (options.responseObject instanceof ZodType) {
+        const zodSchema = zodToJsonSchema(options.responseObject, 'responseObject');
+        responseObjectForAPI = zodSchema;
+      } else {
+        responseObjectForAPI = options.responseObject;
+      }
+
       const res = await this._fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -99,33 +112,35 @@ export class MeldClient {
         body: JSON.stringify({
           meldId: options.meldId,
           instructions: options.instructions,
-          inputObject: options.responseObject,
+          input: options.input,
+          responseObject: responseObjectForAPI,
           callbackUrl: options.callbackUrl,
+          metadata: options.metadata,
         }),
         signal: controller.signal,
       });
 
       const text = await res.text();
+
       const contentType = res.headers.get('content-type') ?? '';
-      const maybeJson = contentType.includes('application/json');
-      const data = maybeJson && text ? JSON.parse(text) : text;
+      const rawData = contentType.includes('application/json') && text ? JSON.parse(text) : text;
 
       if (!res.ok) {
         throw new MeldAPIError(
-          typeof (data as any)?.message === 'string'
-            ? (data as any).message
+          typeof (rawData as any)?.message === 'string'
+            ? (rawData as any).message
             : `Meld API request failed with status ${res.status}`,
           {
             status: res.status,
             runId: res.headers.get('X-Run-Id'),
-            data,
+            data: rawData,
           }
         );
       }
 
-      return data as T;
-    } catch (err: any) {
-      if (err?.name === 'AbortError') {
+      return rawData as T;
+    } catch (err) {
+      if ((err as any)?.name === 'AbortError') {
         throw new MeldAPIError('Request timed out', { status: 408 });
       }
       throw err;

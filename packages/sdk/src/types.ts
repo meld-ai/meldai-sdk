@@ -1,3 +1,5 @@
+import type { ZodTypeAny } from 'zod';
+
 /**
  * Execution mode for Meld workflows
  */
@@ -58,9 +60,8 @@ export interface BaseError {
 
 /**
  * Configuration options for running a Meld workflow
- * @template T The expected type of the response object
  */
-export type RunMeldOptions<T> = {
+export type RunMeldOptions = {
   /** 
    * The unique identifier of the Meld workflow to execute
    * @example "translate-to-french"
@@ -77,7 +78,20 @@ export type RunMeldOptions<T> = {
    * The input data to be processed by the Meld workflow
    * @example { message: "Hello world", userId: 123 }
    */
-  responseObject: T;
+  input: Record<string, unknown>;
+
+  /** 
+   * Either a Zod schema for validation/inference, or any JSON object to describe the expected shape without validation
+   * @example z.object({ key: z.array(z.string()) })
+   * @example { key: ['value1', 'value2'] }
+   */
+  responseObject: ZodTypeAny | Record<string, unknown>;
+
+  /**
+   * Additional metadata to be included in the request
+   * @example { userId: 123 }
+   */
+  metadata?: Record<string, unknown>;
 
   /** 
    * Optional callback URL for asynchronous execution
