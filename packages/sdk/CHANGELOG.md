@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/meld-ai/meldai-sdk/compare/v1.1.1...v1.1.2) (2025-09-18)
+
+
+### Bug Fixes
+
+* **sdk:** added localhost for testing and change base sdk url ([e4c2f8d](https://github.com/meld-ai/meldai-sdk/commit/e4c2f8dc49197211828ff58410b10a211a9d39b8))
+* **sdk:** added localhost for testing and change base sdk url ([cc5a273](https://github.com/meld-ai/meldai-sdk/commit/cc5a2736419512316d45e49bda0d87edf1159293))
+
 ## [1.1.1](https://github.com/meld-ai/meldai-sdk/compare/v1.1.0...v1.1.1) (2025-09-17)
 
 
