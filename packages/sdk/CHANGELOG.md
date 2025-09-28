@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/meld-ai/meldai-sdk/compare/v1.2.0...v1.2.1) (2025-09-28)
+
+
+### Bug Fixes
+
+* update readmes to new sdk spec ([3300595](https://github.com/meld-ai/meldai-sdk/commit/3300595925ad4f085ff848c852c44d2f8e2fd81b))
+* update tests to new client. ([03c7666](https://github.com/meld-ai/meldai-sdk/commit/03c7666a772411ffff71b0aef412997f4f9e6fd1))
+
 # [1.2.0](https://github.com/meld-ai/meldai-sdk/compare/v1.1.2...v1.2.0) (2025-09-25)
 
 
