@@ -74,8 +74,8 @@ func NewClient(opts *ClientOptions) *Client {
 	return client
 }
 
-// EnsureAndRunWebhookOptions defines the parameters for ensuring and running a Meld
-type EnsureAndRunWebhookOptions[T any] struct {
+// BuildAndRunOptions defines the parameters for building and running a Meld
+type BuildAndRunOptions[T any] struct {
 	Name           string
 	Input          map[string]interface{}
 	Mode           string // "sync" or "async"
@@ -86,8 +86,8 @@ type EnsureAndRunWebhookOptions[T any] struct {
 	Timeout        time.Duration
 }
 
-// EnsureAndRunWebhook ensures (create/update) a meld by name and runs it
-func (m *MeldsResource) EnsureAndRunWebhook[T any](ctx context.Context, options EnsureAndRunWebhookOptions[T]) (T, error) {
+// BuildAndRun builds and runs a meld by name
+func (m *MeldsResource) BuildAndRun[T any](ctx context.Context, options BuildAndRunOptions[T]) (T, error) {
 	var result T
 
 	if m.client.apiKey == "" {

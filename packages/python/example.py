@@ -4,7 +4,7 @@ Basic example using the Meld.ai Python SDK
 """
 
 import os
-from meldai import MeldClient, MeldClientOptions, EnsureAndRunWebhookOptions
+from meldai import MeldClient, MeldClientOptions, BuildAndRunOptions
 
 def main():
     client = MeldClient(MeldClientOptions(api_key=os.getenv("MELD_API_KEY")))
@@ -16,7 +16,7 @@ def main():
             self.title = title
     
     # Run the Meld workflow
-    result = client.melds.ensure_and_run_webhook(EnsureAndRunWebhookOptions(
+    result = client.melds.build_and_run(BuildAndRunOptions(
         name="translate-to-french",
         input={
             "text": "Hello world",

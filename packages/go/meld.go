@@ -13,7 +13,7 @@ package meld
 //		Body  string `json:"body"`
 //	}
 //
-//	result, err := client.Melds.EnsureAndRunWebhook(context.Background(), meld.EnsureAndRunWebhookOptions[MyOutput]{
+//	result, err := client.Melds.BuildAndRun(context.Background(), meld.BuildAndRunOptions[MyOutput]{
 //		Name: "translate-to-french",
 //		Input: map[string]interface{}{"text": "Hello world"},
 //		Mode: "sync",

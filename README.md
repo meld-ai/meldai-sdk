@@ -41,7 +41,7 @@ const main = async () => {
 
   type TranslationResult = z.infer<typeof responseSchema>;
 
-  const result = await client.melds.ensureAndRunWebhook<TranslationResult>({
+  const result = await client.melds.buildAndRun<TranslationResult>({
     name: "translate-to-french",
     input: { 
       message: "Hello world", 
@@ -71,7 +71,7 @@ const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 const main = async () => {
   type StructuredOutput = { body: string, title: string };
 
-  const result = await client.melds.ensureAndRunWebhook<StructuredOutput>({
+  const result = await client.melds.buildAndRun<StructuredOutput>({
     name: "translate-to-french",
     input: { 
       message: "Hello world", 
@@ -118,7 +118,7 @@ func main() {
         Title string `json:"title"`
     }
 
-    result, err := client.Melds.EnsureAndRunWebhook(context.Background(), meld.EnsureAndRunWebhookOptions[StructuredOutput]{
+    result, err := client.Melds.BuildAndRun(context.Background(), meld.BuildAndRunOptions[StructuredOutput]{
         Name:  "translate-to-french",
         Input: map[string]interface{}{
             "message": "Hello world",
@@ -162,7 +162,7 @@ def main():
             self.body = body
             self.title = title
     
-    result = client.melds.ensure_and_run_webhook(EnsureAndRunWebhookOptions(
+    result = client.melds.build_and_run(BuildAndRunOptions(
         name="translate-to-french",
         input={
             "message": "Hello world", 

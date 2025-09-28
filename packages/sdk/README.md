@@ -4,7 +4,7 @@
 
 Go from duct-taped prompts to durable AI systems — fast. Meld is your workbench for designing, controlling, collaborating & deploying AI systems with confidence. This SDK lets you programmatically run your Melds (AI workflows) with full observability and type safety.
 
-- **Resource-based API**: Clean resource structure with `client.melds.ensureAndRunWebhook<T>(options)` to execute your AI workflows
+- **Resource-based API**: Clean resource structure with `client.melds.buildAndRun<T>(options)` to execute your AI workflows
 - **Zod Integration**: Use Zod schemas for automatic validation and type inference
 - **Sync & Async**: Retrieve results synchronously or asynchronously with a callbackUrl
 - **Type Safety**: Full TypeScript support with strict typing for inputs and outputs  
@@ -41,7 +41,7 @@ const responseSchema = z.object({
 
 type TranslationResult = z.infer<typeof responseSchema>;
 
-  const result = await client.melds.ensureAndRunWebhook<TranslationResult>({
+  const result = await client.melds.buildAndRun<TranslationResult>({
     name: "translate-to-french",
     input: { 
       message: "Hello world", 
@@ -67,7 +67,7 @@ const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 
 type MyResponse = { title: string; body: string };
 
-const result = await client.melds.ensureAndRunWebhook<MyResponse>({
+const result = await client.melds.buildAndRun<MyResponse>({
   name: "translate-to-french",
   input: { 
     message: "Hello world", 
@@ -92,7 +92,7 @@ import { MeldClient } from "@meldai/sdk";
 const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 
 // For long-running workflows, use async mode
-await client.melds.ensureAndRunWebhook({
+await client.melds.buildAndRun({
   name: "translate-to-french",
   input: { 
     message: "Hello world", 
@@ -120,10 +120,10 @@ new MeldClient(options?: {
 });
 ```
 
-#### `client.melds.ensureAndRunWebhook<T>(options: EnsureAndRunWebhookOptions): Promise<T>`
+#### `client.melds.buildAndRun<T>(options: BuildAndRunOptions): Promise<T>`
 
 ```ts
-export type EnsureAndRunWebhookOptions = {
+export type BuildAndRunOptions = {
   /** Name of the meld to ensure and then run */
   name: string;
   
@@ -182,7 +182,7 @@ Non‑2xx responses throw `MeldAPIError`:
 import { MeldAPIError } from "@meldai/sdk";
 
 try {
-  await client.melds.ensureAndRunWebhook({
+  await client.melds.buildAndRun({
     name: "my-workflow",
     input: { 
       data: "test",
@@ -212,7 +212,7 @@ The error carries:
 For long-running workflows, use async mode with a callback URL:
 
 ```ts
-await client.melds.ensureAndRunWebhook({
+await client.melds.buildAndRun({
   name: "long-running-workflow",
   input: { 
     dataset: "...",

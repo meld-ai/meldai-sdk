@@ -12,7 +12,7 @@ import { MeldAPIError } from '../errors';
  * Options to ensure (create/update) a meld by name using an optional template, then run it.
  * responseObject is required; template can be any JSON object.
  */
-export type EnsureAndRunWebhookOptions = {
+export type BuildAndRunOptions = {
   /** Name of the meld to ensure and then run */
   name: string;
   /** Input payload for the run */
@@ -34,7 +34,7 @@ export type EnsureAndRunWebhookOptions = {
 export class MeldsResource {
   constructor(private client: MeldClient) { }
 
-  async ensureAndRunWebhook<T>(options: EnsureAndRunWebhookOptions): Promise<T> {
+  async buildAndRun<T>(options: BuildAndRunOptions): Promise<T> {
     const timeout = options.timeoutMs ?? this.client._getDefaultTimeout();
 
     const baseUrl = this.client._getBaseUrl();

@@ -2,7 +2,7 @@ from typing import Any, Generic, TypeVar, Dict, Optional
 
 T = TypeVar('T')
 
-class EnsureAndRunWebhookOptions(Generic[T]):
+class BuildAndRunOptions(Generic[T]):
     """Options for ensuring and running a Meld workflow."""
     
     def __init__(

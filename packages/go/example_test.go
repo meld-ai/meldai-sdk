@@ -23,7 +23,7 @@ func TestClient_EnsureAndRunWebhook(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	result, err := client.Melds.EnsureAndRunWebhook(ctx, EnsureAndRunWebhookOptions[StructuredOutput]{
+	result, err := client.Melds.BuildAndRun(ctx, BuildAndRunOptions[StructuredOutput]{
 		Name: "translate-to-french",
 		Input: map[string]interface{}{
 			"text":         "Hello world",

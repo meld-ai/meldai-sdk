@@ -3,7 +3,7 @@ import os
 from typing import Any, Dict, Optional, TypeVar, Generic
 import requests
 from .errors import MeldAPIError
-from .types import EnsureAndRunWebhookOptions
+from .types import BuildAndRunOptions
 
 T = TypeVar('T')
 
@@ -40,7 +40,7 @@ class MeldClient:
         self.options = options or MeldClientOptions()
         self.melds = MeldsResource(self)
         
-    def ensure_and_run_webhook(self, options: EnsureAndRunWebhookOptions[T]) -> T:
+    def build_and_run(self, options: BuildAndRunOptions[T]) -> T:
         """Ensure (create/update) a meld by name and run it."""
         if not self.options.api_key:
             raise ValueError("Missing API key. Pass apiKey or set MELD_API_KEY environment variable")

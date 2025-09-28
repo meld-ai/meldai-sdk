@@ -27,7 +27,7 @@ class StructuredOutput:
         self.body = body
         self.title = title
 
-result = client.melds.ensure_and_run_webhook(EnsureAndRunWebhookOptions(
+result = client.melds.build_and_run(BuildAndRunOptions(
     name="translate-to-french",
     input={
         "text": "Hello world",
@@ -58,12 +58,12 @@ class MeldClientOptions:
     )
 ```
 
-### `client.melds.ensure_and_run_webhook(options: EnsureAndRunWebhookOptions[T]) -> T`
+### `client.melds.build_and_run(options: BuildAndRunOptions[T]) -> T`
 
 Ensures (create/update) a meld by name and runs it.
 
 ```python
-class EnsureAndRunWebhookOptions:
+class BuildAndRunOptions:
     def __init__(
         self,
         name: str,                     # Name of the meld to ensure and run
@@ -82,7 +82,7 @@ API errors are raised as `MeldAPIError`:
 
 ```python
 try:
-    result = client.melds.ensure_and_run_webhook(options)
+    result = client.melds.build_and_run(options)
 except MeldAPIError as e:
     print(f"API Error: {e.message} (status: {e.status}, run: {e.run_id})")
 except Exception as e:

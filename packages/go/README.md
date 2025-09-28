@@ -39,7 +39,7 @@ func main() {
         Body  string `json:"body"`
     }
 
-    result, err := client.Melds.EnsureAndRunWebhook(context.Background(), meld.EnsureAndRunWebhookOptions[MyStructuredOutput]{
+    result, err := client.Melds.BuildAndRun(context.Background(), meld.BuildAndRunOptions[MyStructuredOutput]{
         Name: "translate-to-french",
         Input: map[string]interface{}{
             "text": "Hello world",
@@ -76,12 +76,12 @@ type ClientOptions struct {
 }
 ```
 
-### `client.Melds.EnsureAndRunWebhook[T](ctx context.Context, options EnsureAndRunWebhookOptions[T]) (T, error)`
+### `client.Melds.BuildAndRun[T](ctx context.Context, options BuildAndRunOptions[T]) (T, error)`
 
 Ensures (create/update) a meld by name and runs it.
 
 ```go
-type EnsureAndRunWebhookOptions[T any] struct {
+type BuildAndRunOptions[T any] struct {
     Name           string                 // Name of the meld to ensure and run
     Input          map[string]interface{} // Input data to process
     Mode           string                 // Execution mode: "sync" or "async"
@@ -97,7 +97,7 @@ type EnsureAndRunWebhookOptions[T any] struct {
 API errors are returned as `*APIError`:
 
 ```go
-result, err := client.Melds.EnsureAndRunWebhook(ctx, options)
+result, err := client.Melds.BuildAndRun(ctx, options)
 if err != nil {
     var apiErr *meld.APIError
     if errors.As(err, &apiErr) {

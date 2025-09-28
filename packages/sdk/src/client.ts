@@ -45,7 +45,7 @@ export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai/';
  * });
  * 
  * const schema = z.object({ key: z.array(z.string()) });
- * const result = await client.melds.ensureAndRunWebhook<MyResultType>({
+ * const result = await client.melds.buildAndRun<MyResultType>({
  *   name: 'meld_123',
  *   input: { 
  *     text: 'Hello world',
