@@ -41,10 +41,14 @@ const main = async () => {
 
   type TranslationResult = z.infer<typeof responseSchema>;
 
-  const result = await client.runMeld<TranslationResult>({
-    meldId: "translate-to-french",
-    instructions: "Convert the provided input into french",
-    input: { message: "Hello world", userId: 123 },
+  const result = await client.melds.ensureAndRunWebhook<TranslationResult>({
+    name: "translate-to-french",
+    input: { 
+      message: "Hello world", 
+      userId: 123,
+      instructions: "Convert the provided input into french"
+    },
+    mode: "sync",
     responseObject: responseSchema,
     metadata: { requestId: "abc-123" },
   });
@@ -67,10 +71,14 @@ const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 const main = async () => {
   type StructuredOutput = { body: string, title: string };
 
-  const result = await client.runMeld<StructuredOutput>({
-    meldId: "translate-to-french",
-    instructions: "Convert the provided input into french",
-    input: { message: "Hello world", userId: 123 },
+  const result = await client.melds.ensureAndRunWebhook<StructuredOutput>({
+    name: "translate-to-french",
+    input: { 
+      message: "Hello world", 
+      userId: 123,
+      instructions: "Convert the provided input into french"
+    },
+    mode: "sync",
     responseObject: { title: "string", body: "string" }, // Plain object descriptor
     metadata: { requestId: "abc-123" },
   });
@@ -110,16 +118,17 @@ func main() {
         Title string `json:"title"`
     }
 
-    result, err := client.RunMeld(context.Background(), meld.RunMeldOptions[StructuredOutput]{
-        MeldId:       "translate-to-french",
-        Instructions: "Convert the provided input into french",
+    result, err := client.Melds.EnsureAndRunWebhook(context.Background(), meld.EnsureAndRunWebhookOptions[StructuredOutput]{
+        Name:  "translate-to-french",
         Input: map[string]interface{}{
             "message": "Hello world",
             "userId":  123,
+            "instructions": "Convert the provided input into french",
         },
+        Mode: "sync",
         ResponseObject: StructuredOutput{
-            Title: "Hello",
-            Body:  "This is a test payload",
+            Title: "",
+            Body:  "",
         },
         Metadata: map[string]interface{}{
             "requestId": "abc-123",
@@ -143,7 +152,7 @@ pip install meldai-sdk
 
 ```python
 import os
-from meldai import MeldClient, MeldClientOptions, RunMeldOptions
+from meldai import MeldClient, MeldClientOptions, EnsureAndRunWebhookOptions
 
 def main():
     client = MeldClient(MeldClientOptions(api_key=os.getenv("MELD_API_KEY")))
@@ -153,11 +162,15 @@ def main():
             self.body = body
             self.title = title
     
-    result = client.run_meld(RunMeldOptions(
-        meld_id="translate-to-french",
-        instructions="Convert the provided input into french",
-        input={"message": "Hello world", "userId": 123},
-        response_object=StructuredOutput(title="Hello", body="This is a test payload"),
+    result = client.melds.ensure_and_run_webhook(EnsureAndRunWebhookOptions(
+        name="translate-to-french",
+        input={
+            "message": "Hello world", 
+            "userId": 123,
+            "instructions": "Convert the provided input into french"
+        },
+        mode="sync",
+        response_object=StructuredOutput(title="", body=""),
         metadata={"requestId": "abc-123"},
     ))
     

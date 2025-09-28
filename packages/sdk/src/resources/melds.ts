@@ -7,15 +7,6 @@ import { MeldAPIError } from '../errors';
 /**
  * Melds resource for managing Meld workflows
  */
-/**
- * Options for running an existing webhook by pinned ID
- */
-
-export type RunWebhookOptions = {
-  meldId: string;
-  payload?: Record<string, unknown>;
-  timeoutMs?: number;
-};
 
 /**
  * Options to ensure (create/update) a meld by name using an optional template, then run it.

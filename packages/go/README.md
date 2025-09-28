@@ -39,12 +39,16 @@ func main() {
         Body  string `json:"body"`
     }
 
-    result, err := client.RunMeld(context.Background(), meld.RunMeldOptions[MyStructuredOutput]{
-        MeldId: "your-meld-id",
-        Instructions: "Summarize the input succinctly in french",
+    result, err := client.Melds.EnsureAndRunWebhook(context.Background(), meld.EnsureAndRunWebhookOptions[MyStructuredOutput]{
+        Name: "translate-to-french",
+        Input: map[string]interface{}{
+            "text": "Hello world",
+            "instructions": "Summarize the input succinctly in french",
+        },
+        Mode: "sync",
         ResponseObject: MyStructuredOutput{
-            Title: "Hello", 
-            Body: "This is an example payload",
+            Title: "", 
+            Body: "",
         },
     })
 
@@ -72,17 +76,19 @@ type ClientOptions struct {
 }
 ```
 
-### `RunMeld[T](ctx context.Context, options RunMeldOptions[T]) (T, error)`
+### `client.Melds.EnsureAndRunWebhook[T](ctx context.Context, options EnsureAndRunWebhookOptions[T]) (T, error)`
 
-Executes a Meld workflow and returns the structured result.
+Ensures (create/update) a meld by name and runs it.
 
 ```go
-type RunMeldOptions[T any] struct {
-    MeldId         string        // Meld ID to execute
-    Instructions   string        // Instructions for the AI workflow
-    ResponseObject T             // Input data to process
-    CallbackUrl    string        // Optional callback URL for async execution
-    Timeout        time.Duration // Override default timeout (optional)
+type EnsureAndRunWebhookOptions[T any] struct {
+    Name           string                 // Name of the meld to ensure and run
+    Input          map[string]interface{} // Input data to process
+    Mode           string                 // Execution mode: "sync" or "async"
+    ResponseObject T                      // Expected response structure
+    CallbackUrl    string                 // Optional callback URL (required for async mode)
+    Metadata       map[string]interface{} // Optional metadata
+    Timeout        time.Duration          // Override default timeout (optional)
 }
 ```
 
@@ -91,7 +97,7 @@ type RunMeldOptions[T any] struct {
 API errors are returned as `*APIError`:
 
 ```go
-result, err := client.RunMeld(ctx, options)
+result, err := client.Melds.EnsureAndRunWebhook(ctx, options)
 if err != nil {
     var apiErr *meld.APIError
     if errors.As(err, &apiErr) {

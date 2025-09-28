@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestClient_RunMeld(t *testing.T) {
+func TestClient_EnsureAndRunWebhook(t *testing.T) {
 	// Skip if no API key is set
 	if os.Getenv("MELD_API_KEY") == "" {
 		t.Skip("MELD_API_KEY not set, skipping integration test")
@@ -23,17 +23,21 @@ func TestClient_RunMeld(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	result, err := client.RunMeld(ctx, RunMeldOptions[StructuredOutput]{
-		MeldId:       "translate-to-french",
-		Instructions: "Convert the provided input into french",
+	result, err := client.Melds.EnsureAndRunWebhook(ctx, EnsureAndRunWebhookOptions[StructuredOutput]{
+		Name: "translate-to-french",
+		Input: map[string]interface{}{
+			"text":         "Hello world",
+			"instructions": "Convert text to formal French.",
+		},
+		Mode: "sync",
 		ResponseObject: StructuredOutput{
-			Title: "Hello",
-			Body:  "This is a test payload",
+			Title: "",
+			Body:  "",
 		},
 	})
 
 	if err != nil {
-		t.Fatalf("RunMeld failed: %v", err)
+		t.Fatalf("EnsureAndRunWebhook failed: %v", err)
 	}
 
 	// Check that we got a result (exact content may vary)

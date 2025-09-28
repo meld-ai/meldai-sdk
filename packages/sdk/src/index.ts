@@ -1,3 +1,3 @@
 export { MeldClient, type MeldClientOptions } from './client';
-export type { RunMeldOptions } from './types';
+export type { EnsureAndRunWebhookOptions } from './resources/melds';
 export { MeldAPIError } from './errors';

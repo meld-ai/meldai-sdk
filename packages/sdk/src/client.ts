@@ -45,10 +45,13 @@ export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai/';
  * });
  * 
  * const schema = z.object({ key: z.array(z.string()) });
- * const result = await client.melds.createAndRun<MyResultType>({
- *   meldId: 'meld_123',
- *   instructions: 'Extract keywords',
- *   input: { text: 'Hello world' },
+ * const result = await client.melds.ensureAndRunWebhook<MyResultType>({
+ *   name: 'meld_123',
+ *   input: { 
+ *     text: 'Hello world',
+ *     instructions: 'Extract keywords'
+ *   },
+ *   mode: 'sync',
  *   responseObject: schema,
  *   metadata: { userId: 123 },
  * });

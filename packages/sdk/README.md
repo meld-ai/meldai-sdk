@@ -4,7 +4,7 @@
 
 Go from duct-taped prompts to durable AI systems — fast. Meld is your workbench for designing, controlling, collaborating & deploying AI systems with confidence. This SDK lets you programmatically run your Melds (AI workflows) with full observability and type safety.
 
-- **Simple API**: Single call `runMeld<T>(options)` to execute your AI workflows
+- **Resource-based API**: Clean resource structure with `client.melds.ensureAndRunWebhook<T>(options)` to execute your AI workflows
 - **Zod Integration**: Use Zod schemas for automatic validation and type inference
 - **Sync & Async**: Retrieve results synchronously or asynchronously with a callbackUrl
 - **Type Safety**: Full TypeScript support with strict typing for inputs and outputs  
@@ -41,13 +41,17 @@ const responseSchema = z.object({
 
 type TranslationResult = z.infer<typeof responseSchema>;
 
-const result = await client.runMeld<TranslationResult>({
-  meldId: "translate-to-french",
-  instructions: "Convert the provided input into french",
-  input: { message: "Hello world", userId: 123 },
-  responseObject: responseSchema,
-  metadata: { requestId: "abc-123" },
-});
+  const result = await client.melds.ensureAndRunWebhook<TranslationResult>({
+    name: "translate-to-french",
+    input: { 
+      message: "Hello world", 
+      userId: 123,
+      instructions: "Convert the provided input into french"
+    },
+    mode: "sync",
+    responseObject: responseSchema,
+    metadata: { requestId: "abc-123" },
+  });
 
 console.log('result', result);
 // Output: { title: "Bonjour", body: "Ceci est une charge utile de test" }
@@ -63,10 +67,14 @@ const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
 
 type MyResponse = { title: string; body: string };
 
-const result = await client.runMeld<MyResponse>({
-  meldId: "translate-to-french",
-  instructions: "Convert the provided input into french",
-  input: { message: "Hello world", userId: 123 },
+const result = await client.melds.ensureAndRunWebhook<MyResponse>({
+  name: "translate-to-french",
+  input: { 
+    message: "Hello world", 
+    userId: 123,
+    instructions: "Convert the provided input into french"
+  },
+  mode: "sync",
   responseObject: { title: "string", body: "string" }, // Plain object descriptor
   metadata: { requestId: "abc-123" },
 });
@@ -74,6 +82,29 @@ const result = await client.runMeld<MyResponse>({
 console.log('result', result);
 // Output: { title: "Bonjour", body: "Ceci est une charge utile de test" }
 // Typed but not validated
+```
+
+### Async with Callback URL
+
+```ts
+import { MeldClient } from "@meldai/sdk";
+
+const client = new MeldClient({ apiKey: process.env.MELD_API_KEY });
+
+// For long-running workflows, use async mode
+await client.melds.ensureAndRunWebhook({
+  name: "translate-to-french",
+  input: { 
+    message: "Hello world", 
+    userId: 123,
+    instructions: "Convert the provided input into french"
+  },
+  mode: "async",
+  responseObject: { title: "string", body: "string" },
+  callbackUrl: "https://your-app.com/webhook/meld-callback",
+  metadata: { requestId: "abc-123" },
+});
+// Returns immediately, results will be sent to your callback URL
 ```
 
 ## API
@@ -89,18 +120,18 @@ new MeldClient(options?: {
 });
 ```
 
-#### `runMeld<T>(options: RunMeldOptions): Promise<T>`
+#### `client.melds.ensureAndRunWebhook<T>(options: EnsureAndRunWebhookOptions): Promise<T>`
 
 ```ts
-export type RunMeldOptions = {
-  /** Unique identifier of the Meld workflow to execute */
-  meldId: string;
-  
-  /** Natural language instructions for the AI workflow */
-  instructions: string;
+export type EnsureAndRunWebhookOptions = {
+  /** Name of the meld to ensure and then run */
+  name: string;
   
   /** Input data to be processed by the Meld workflow */
   input: Record<string, unknown>;
+  
+  /** Execution mode for the workflow */
+  mode: 'sync' | 'async';
   
   /** 
    * Either a Zod schema for validation/inference, or any JSON object 
@@ -108,14 +139,14 @@ export type RunMeldOptions = {
    */
   responseObject: ZodTypeAny | Record<string, unknown>;
   
-  /** Additional metadata to be included in the request */
-  metadata: Record<string, unknown>;
+  /** Optional declarative template (any JSON) to ensure/update the meld */
+  template?: Record<string, unknown>;
   
-  /** Optional callback URL for asynchronous execution */
+  /** Optional callback URL (required for async mode) */
   callbackUrl?: string;
   
-  /** Execution mode for the workflow */
-  mode?: 'sync' | 'async';
+  /** Optional metadata to be included in the request */
+  metadata?: Record<string, unknown>;
   
   /** Optional timeout in milliseconds (overrides client default) */
   timeoutMs?: number;
@@ -151,10 +182,13 @@ Non‑2xx responses throw `MeldAPIError`:
 import { MeldAPIError } from "@meldai/sdk";
 
 try {
-  await client.runMeld({
-    meldId: "my-workflow",
-    instructions: "Process this data",
-    input: { data: "test" },
+  await client.melds.ensureAndRunWebhook({
+    name: "my-workflow",
+    input: { 
+      data: "test",
+      instructions: "Process this data"
+    },
+    mode: "sync",
     responseObject: mySchema,
     metadata: {},
   });
@@ -178,10 +212,13 @@ The error carries:
 For long-running workflows, use async mode with a callback URL:
 
 ```ts
-await client.runMeld({
-  meldId: "long-running-workflow",
-  instructions: "Process large dataset",
-  input: { dataset: "..." },
+await client.melds.ensureAndRunWebhook({
+  name: "long-running-workflow",
+  input: { 
+    dataset: "...",
+    instructions: "Process large dataset"
+  },
+  mode: "async",
   responseObject: resultSchema,
   metadata: { userId: 123 },
   callbackUrl: "https://your-app.com/webhook/meld-callback",

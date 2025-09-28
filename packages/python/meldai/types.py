@@ -1,20 +1,24 @@
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, Dict, Optional
 
 T = TypeVar('T')
 
-class RunMeldOptions(Generic[T]):
-    """Options for running a Meld workflow."""
+class EnsureAndRunWebhookOptions(Generic[T]):
+    """Options for ensuring and running a Meld workflow."""
     
     def __init__(
         self,
-        meld_id: str,
-        instructions: str,
+        name: str,
+        input: Dict[str, Any],
+        mode: str,
         response_object: T,
-        callback_url: str = None,
-        timeout: float = None,
+        callback_url: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        timeout: Optional[float] = None,
     ):
-        self.meld_id = meld_id
-        self.instructions = instructions
+        self.name = name
+        self.input = input
+        self.mode = mode
         self.response_object = response_object
         self.callback_url = callback_url
+        self.metadata = metadata
         self.timeout = timeout

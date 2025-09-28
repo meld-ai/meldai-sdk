@@ -3,11 +3,11 @@ import os
 from typing import Any, Dict, Optional, TypeVar, Generic
 import requests
 from .errors import MeldAPIError
-from .types import RunMeldOptions
+from .types import EnsureAndRunWebhookOptions
 
 T = TypeVar('T')
 
-DEFAULT_BASE_URL = "https://sdk-api.meld.ai"
+DEFAULT_BASE_URL = "https://sdk-api.meld.ai/"
 DEFAULT_TIMEOUT = 60.0
 
 
@@ -27,36 +27,49 @@ class MeldClientOptions:
         self.session = session or requests.Session()
 
 
+class MeldsResource:
+    """Resource for managing Meld workflows."""
+    
+    def __init__(self, client: 'MeldClient'):
+        self.client = client
+
 class MeldClient:
     """Main client for interacting with the Meld.ai API."""
     
     def __init__(self, options: Optional[MeldClientOptions] = None):
         self.options = options or MeldClientOptions()
+        self.melds = MeldsResource(self)
         
-    async def run_meld(self, options: RunMeldOptions[T]) -> T:
-        """Execute a Meld workflow and return the structured result."""
+    def ensure_and_run_webhook(self, options: EnsureAndRunWebhookOptions[T]) -> T:
+        """Ensure (create/update) a meld by name and run it."""
         if not self.options.api_key:
             raise ValueError("Missing API key. Pass apiKey or set MELD_API_KEY environment variable")
         
-        # Determine endpoint based on callbackUrl presence
+        # Validate async mode requires callbackUrl
+        if options.mode == "async" and not options.callback_url:
+            raise ValueError("callbackUrl is required for async mode")
+        
+        # Determine endpoint
         endpoint = f"{self.options.base_url}/api/v1/meld-run"
-        if not options.callback_url:
+        if options.mode == "sync" or options.mode == "":
             endpoint += "/sync"
         
         # Prepare request payload
         payload = {
-            "meldId": options.meld_id,
-            "instructions": options.instructions,
-            "inputObject": options.response_object,
+            "name": options.name,
+            "input": options.input,
+            "responseObject": options.response_object,
         }
         if options.callback_url:
             payload["callbackUrl"] = options.callback_url
+        if options.metadata:
+            payload["metadata"] = options.metadata
         
         # Prepare headers
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.options.api_key}",
-            "X-Meld-Client": f"meldai-python-sdk",
+            "X-Meld-Client": "@meldai/python-sdk",
         }
         
         try:
@@ -65,7 +78,7 @@ class MeldClient:
                 endpoint,
                 json=payload,
                 headers=headers,
-                timeout=self.options.timeout,
+                timeout=options.timeout or self.options.timeout,
             )
             
             # Handle response

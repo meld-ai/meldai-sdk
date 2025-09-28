@@ -13,9 +13,11 @@ package meld
 //		Body  string `json:"body"`
 //	}
 //
-//	result, err := client.RunMeld(context.Background(), meld.RunMeldOptions[MyOutput]{
-//		Instructions: "Summarize the input succinctly in french",
-//		ResponseObject: MyOutput{Title: "Hello", Body: "This is an example payload"},
+//	result, err := client.Melds.EnsureAndRunWebhook(context.Background(), meld.EnsureAndRunWebhookOptions[MyOutput]{
+//		Name: "translate-to-french",
+//		Input: map[string]interface{}{"text": "Hello world"},
+//		Mode: "sync",
+//		ResponseObject: MyOutput{},
 //	})
 //
 //	if err != nil {

@@ -18,7 +18,7 @@ pip install meldai-sdk
 
 ```python
 import os
-from meldai import MeldClient, MeldClientOptions, RunMeldOptions
+from meldai import MeldClient, MeldClientOptions, EnsureAndRunWebhookOptions
 
 client = MeldClient(MeldClientOptions(api_key=os.getenv("MELD_API_KEY")))
 
@@ -27,10 +27,14 @@ class StructuredOutput:
         self.body = body
         self.title = title
 
-result = client.run_meld(RunMeldOptions(
-    meld_id="your-meld-id",
-    instructions="Convert the provided input into french",
-    response_object=StructuredOutput(title="Hello", body="This is a test payload"),
+result = client.melds.ensure_and_run_webhook(EnsureAndRunWebhookOptions(
+    name="translate-to-french",
+    input={
+        "text": "Hello world",
+        "instructions": "Convert the provided input into french"
+    },
+    mode="sync",
+    response_object=StructuredOutput(title="", body=""),
 ))
 
 print('result', result)
@@ -54,18 +58,20 @@ class MeldClientOptions:
     )
 ```
 
-### `run_meld(options: RunMeldOptions[T]) -> T`
+### `client.melds.ensure_and_run_webhook(options: EnsureAndRunWebhookOptions[T]) -> T`
 
-Executes a Meld workflow and returns the structured result.
+Ensures (create/update) a meld by name and runs it.
 
 ```python
-class RunMeldOptions:
+class EnsureAndRunWebhookOptions:
     def __init__(
         self,
-        meld_id: str,                  # Meld ID to execute
-        instructions: str,             # Instructions for the AI workflow
-        response_object: T,            # Input data to process
-        callback_url: str = None,      # Optional callback URL for async execution
+        name: str,                     # Name of the meld to ensure and run
+        input: Dict[str, Any],         # Input data to process
+        mode: str,                     # Execution mode: "sync" or "async"
+        response_object: T,            # Expected response structure
+        callback_url: str = None,      # Optional callback URL (required for async mode)
+        metadata: Dict[str, Any] = None, # Optional metadata
         timeout: float = None,         # Override default timeout (optional)
     )
 ```
@@ -76,7 +82,7 @@ API errors are raised as `MeldAPIError`:
 
 ```python
 try:
-    result = client.run_meld(options)
+    result = client.melds.ensure_and_run_webhook(options)
 except MeldAPIError as e:
     print(f"API Error: {e.message} (status: {e.status}, run: {e.run_id})")
 except Exception as e:
