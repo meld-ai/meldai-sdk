@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/meld-ai/meldai-sdk/compare/v1.2.1...v1.3.0) (2025-09-28)
+
+
+### Features
+
+* change sdk func from ensure to buildAndRun ([94b1f5e](https://github.com/meld-ai/meldai-sdk/commit/94b1f5eef7de1ebb4a3355c5c473b0af1de77b20))
+
 ## [1.2.1](https://github.com/meld-ai/meldai-sdk/compare/v1.2.0...v1.2.1) (2025-09-28)
 
 
