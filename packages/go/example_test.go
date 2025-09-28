@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestClient_EnsureAndRunWebhook(t *testing.T) {
+func TestClient_BuildAndRun(t *testing.T) {
 	// Skip if no API key is set
 	if os.Getenv("MELD_API_KEY") == "" {
 		t.Skip("MELD_API_KEY not set, skipping integration test")

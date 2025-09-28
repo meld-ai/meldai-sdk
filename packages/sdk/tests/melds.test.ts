@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 const mockFetch = (global as any).fetch as jest.MockedFunction<typeof fetch>;
 
-describe('client.melds.ensureAndRunWebhook', () => {
+describe('client.melds.buildAndRun', () => {
   const mockResponse = { title: 'Test', body: 'Test body' };
   const schema = z.object({ title: z.string(), body: z.string() });
 
@@ -21,7 +21,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
 
   it('runs with template and sync mode', async () => {
     const client = new MeldClient({ apiKey: 'test-key' });
-    const result = await client.melds.ensureAndRunWebhook({
+    const result = await client.melds.buildAndRun({
       name: 'translate-to-french',
       template: { instructions: 'Convert text to formal French.' },
       responseObject: schema,
@@ -33,7 +33,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
 
   it('runs without template and sync mode', async () => {
     const client = new MeldClient({ apiKey: 'test-key' });
-    const result = await client.melds.ensureAndRunWebhook({
+    const result = await client.melds.buildAndRun({
       name: 'translate-to-french',
       responseObject: { translation: '' },
       input: { text: 'Good morning!' },
@@ -44,7 +44,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
 
   it('runs with template and async mode (requires callbackUrl)', async () => {
     const client = new MeldClient({ apiKey: 'test-key' });
-    const result = await client.melds.ensureAndRunWebhook({
+    const result = await client.melds.buildAndRun({
       name: 'translate-to-french',
       template: { instructions: 'Convert text to formal French.' },
       responseObject: schema,
@@ -57,7 +57,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
 
   it('throws error for async mode without callbackUrl', async () => {
     const client = new MeldClient({ apiKey: 'test-key' });
-    await expect(client.melds.ensureAndRunWebhook({
+    await expect(client.melds.buildAndRun({
       name: 'translate-to-french',
       input: { text: 'Good morning!' },
       responseObject: { translation: '' },
@@ -67,7 +67,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
 
   it('uses default base URL', async () => {
     const client = new MeldClient({ apiKey: 'test-key' });
-    await client.melds.ensureAndRunWebhook({
+    await client.melds.buildAndRun({
       name: 'test',
       input: { a: 1 },
       responseObject: z.any(),
@@ -78,7 +78,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
 
   it('uses localhost endpoint format', async () => {
     const client = new MeldClient({ apiKey: 'test-key', baseUrl: 'http://localhost:3000' });
-    await client.melds.ensureAndRunWebhook({
+    await client.melds.buildAndRun({
       name: 'test',
       input: { a: 1 },
       responseObject: z.any(),
@@ -100,7 +100,7 @@ describe('client.melds.ensureAndRunWebhook', () => {
     } as any);
 
     const client = new MeldClient({ apiKey: 'test-key' });
-    await expect(client.melds.ensureAndRunWebhook({
+    await expect(client.melds.buildAndRun({
       name: 'test',
       input: { a: 1 },
       responseObject: z.any(),
