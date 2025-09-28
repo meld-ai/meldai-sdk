@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/meld-ai/meldai-sdk/compare/v1.1.2...v1.2.0) (2025-09-25)
+
+
+### Features
+
+* **sdk:** add Zod and zod-to-json-schema dependencies for schema validation and JSON schema generation ([8d6e375](https://github.com/meld-ai/meldai-sdk/commit/8d6e3754a91c31020091ff36874031cb8ae7a5c3))
+
 ## [1.1.2](https://github.com/meld-ai/meldai-sdk/compare/v1.1.1...v1.1.2) (2025-09-18)
 
 
