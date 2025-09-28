@@ -1,7 +1,5 @@
-import { RunMeldOptions } from './types';
+import { MeldsResource } from './resources/melds';
 import { MeldAPIError } from './errors';
-import { zodToJsonSchema } from 'zod-to-json-schema';
-import { ZodType } from 'zod';
 
 /**
  * Configuration options for the Meld client
@@ -47,7 +45,7 @@ export const DEFAULT_BASE_URL = 'https://sdk-api.meld.ai/';
  * });
  * 
  * const schema = z.object({ key: z.array(z.string()) });
- * const result = await client.runMeld<MyResultType>({
+ * const result = await client.melds.createAndRun<MyResultType>({
  *   meldId: 'meld_123',
  *   instructions: 'Extract keywords',
  *   input: { text: 'Hello world' },
@@ -62,66 +60,75 @@ export class MeldClient {
   private defaultTimeout: number;
   private _fetch: typeof globalThis.fetch;
 
+  /** Melds resource for managing Meld workflows */
+  public readonly melds: MeldsResource;
+
   constructor(opts: MeldClientOptions = {}) {
     this.apiKey = opts.apiKey ?? process.env.MELD_API_KEY ?? null;
     this.baseUrl = opts.baseUrl ?? DEFAULT_BASE_URL;
     this.defaultTimeout = opts.timeoutMs ?? 60_000;
     this._fetch = opts.fetch ?? globalThis.fetch.bind(globalThis);
+
+    // Initialize resources
+    this.melds = new MeldsResource(this);
   }
 
-  async runMeld<T>(options: RunMeldOptions): Promise<T> {
+  /** @internal Get API key for resource classes */
+  _getApiKey(): string | null {
+    return this.apiKey ?? process.env.MELD_API_KEY ?? null;
+  }
+
+  /** @internal Get default timeout for resource classes */
+  _getDefaultTimeout(): number {
+    return this.defaultTimeout;
+  }
+
+  /** @internal Get fetch implementation for resource classes */
+  _getFetch(): typeof globalThis.fetch {
+    return this._fetch;
+  }
+
+  /** @internal Get base URL for resource classes */
+  _getBaseUrl(): string {
+    return this.baseUrl;
+  }
+
+  /** @internal Get auth headers (throws if API key missing) */
+  _getAuthHeaders(): Record<string, string> {
     const apiKey = this.apiKey ?? process.env.MELD_API_KEY ?? null;
     if (!apiKey) {
       throw new Error('Missing API key. Pass apiKey or set MELD_API_KEY.');
     }
+    return {
+      Authorization: `Bearer ${apiKey}`,
+      'X-Meld-Client': '@meldai/sdk',
+    };
+  }
 
-    const timeout = options.timeoutMs ?? this.defaultTimeout;
+  /** @internal Perform HTTP request with timeout, auth, and standard error handling */
+  async _request<T>(
+    url: string,
+    init: RequestInit & { headers?: Record<string, string> } = {},
+    timeoutMs?: number,
+  ): Promise<T> {
     const controller = new AbortController();
+    const timeout = timeoutMs ?? this.defaultTimeout;
     const id = setTimeout(() => controller.abort(), timeout);
 
-    const formatEndpointWithApi = () => {
-      if (this.baseUrl.includes('localhost')) {
-        return `${this.baseUrl}/v1/meld-run`;
-      }
-      return `${this.baseUrl}/api/v1/meld-run`;
-    }
-
-    const url = formatEndpointWithApi()
-
-    // Determine endpoint based on callbackUrl presence
-    const endpoint = options.callbackUrl
-      ? `${url}`
-      : `${url}/sync`;
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...this._getAuthHeaders(),
+      ...(init.headers as Record<string, string> | undefined ?? {}),
+    };
 
     try {
-      let responseObjectForAPI: any;
-      if (options.responseObject instanceof ZodType) {
-        const zodSchema = zodToJsonSchema(options.responseObject, 'responseObject');
-        responseObjectForAPI = zodSchema;
-      } else {
-        responseObjectForAPI = options.responseObject;
-      }
-
-      const res = await this._fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-          'X-Meld-Client': '@meldai/sdk',
-        },
-        body: JSON.stringify({
-          meldId: options.meldId,
-          instructions: options.instructions,
-          input: options.input,
-          responseObject: responseObjectForAPI,
-          callbackUrl: options.callbackUrl,
-          metadata: options.metadata,
-        }),
+      const res = await this._fetch(url, {
+        ...init,
+        headers,
         signal: controller.signal,
       });
 
       const text = await res.text();
-
       const contentType = res.headers.get('content-type') ?? '';
       const rawData = contentType.includes('application/json') && text ? JSON.parse(text) : text;
 

@@ -18,6 +18,7 @@
     "prepublishOnly": "npm run build && npm run lint",
     "example": "tsx scripts/example.ts",
     "example-dist": "tsx scripts/example-dist.ts",
+    "server": "tsx scripts/server.ts",
     "semantic-release": "semantic-release"
   },
   "repository": {
