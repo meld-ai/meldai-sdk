@@ -17,7 +17,7 @@ const main = async () => {
 
   type StructuredResult = typeof myResultSchema
 
-  const result = await client.melds.ensureAndRunWebhook<StructuredResult>({
+  const result = await client.melds.buildAndRun<StructuredResult>({
     name: 'translate-to-french-zod',
     input: {
       message: 'Josh, CTO, age 30 and from the South of France',
@@ -32,7 +32,7 @@ const main = async () => {
 
   console.log('result', result);
 
-  const result2 = await client.melds.ensureAndRunWebhook<StructuredResult>({
+  const result2 = await client.melds.buildAndRun<StructuredResult>({
     name: 'translate-to-french-zod',
     input: {
       message: 'Josh, CTO, age 30 and from the South of France',
@@ -49,7 +49,7 @@ const main = async () => {
 
   // const output = { message: 'Hello world', potentialLocations: ['New York', 'Los Angeles'] };
 
-  // const result3 = await client.melds.ensureAndRunWebhook<typeof output>({
+  // const result3 = await client.melds.buildAndRun<typeof output>({
   //   name: 'translate-to-french-type',
   //   input: {
   //     instructions: 'Convert the provided input into french',

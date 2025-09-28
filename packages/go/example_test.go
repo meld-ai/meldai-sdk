@@ -37,7 +37,7 @@ func TestClient_BuildAndRun(t *testing.T) {
 	})
 
 	if err != nil {
-		t.Fatalf("EnsureAndRunWebhook failed: %v", err)
+		t.Fatalf("BuildAndRun failed: %v", err)
 	}
 
 	// Check that we got a result (exact content may vary)
