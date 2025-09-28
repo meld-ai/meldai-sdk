@@ -1,0 +1,13 @@
+# Cursor Project Rules
+
+# Commenting
+- Do not add code comments unless explicitly instructed by the user.
+- Add doc strings to type definitions to improve intellisense.
+
+# Structure
+- One class per file.
+
+# Style & Types
+- Preserve existing indentation (tabs vs spaces) and width for all edits.
+- Avoid introducing any uses of `any`; prefer `unknown` or concrete types.
+- Prefer clarity and readability; follow the codebase’s existing formatting.

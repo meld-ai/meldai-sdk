@@ -115,3 +115,5 @@ vendor/
 .pnpm-store/
 .yarn/
 .yarnrc.yml
+
+*/example.ts
